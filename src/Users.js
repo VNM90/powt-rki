@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { initUserSyncAction } from './state/users'
+import { initUserSyncAction, stopUserSyncaction } from './state/users'
 class Users extends Component {
     componentDidMount() {
         this.props.initUserSyncAction()
+    }
+
+    componentWillUnmount(){
+        this.props.stopUserSyncaction
     }
     render() {
         return (
@@ -30,7 +34,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    initUserSyncAction: () => dispatch(initUserSyncAction())
+    initUserSyncAction: () => dispatch(initUserSyncAction()),
+    stopUserSyncaction: () => dispatch(stopUserSyncaction())
 })
 
 export default connect(
