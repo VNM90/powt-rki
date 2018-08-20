@@ -1,9 +1,23 @@
+import { database } from '../firebaseConfig'
+
 const SET_USERS = 'users/SET_USERS'
 
-export const userAction = data => ({
+const userAction = data => ({
     type: SET_USERS,
     data
 })
+
+export const initUserSyncAction = () => (dispatch, getState) => {
+    database.ref('jfddl5-users')
+        .on(
+            'value',
+            snapshot => {
+                dispatch(userAction(snapshot.val()))
+            }
+        )
+
+
+}
 
 const initialState = {
     users: null
@@ -11,14 +25,14 @@ const initialState = {
 
 
 
-export default ( state = initialState, action) => {
-    switch(action.type){
+export default (state = initialState, action) => {
+    switch (action.type) {
         case SET_USERS:
-        return {
-            ...state,
-            users: action.data
-        }
+            return {
+                ...state,
+                users: action.data
+            }
         default:
-        return state
+            return state
     }
 }
