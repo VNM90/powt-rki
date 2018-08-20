@@ -1,35 +1,30 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
+import { inputAction, displayText } from './state/smartComponent';
 
-class SmartComponent extends React.Component {
-    state = {
-        inputText: '',
-        displayText: ''
-    }
+const SmartComponent = (props) => (
 
-    onChangeHandler = (event) => {
-        this.setState({
-            inputText: event.target.value
-        })
-    }
+    <div>
+        <p>{props.displayText}</p>
+        <input
+            type='text'
+            onChange={props.onChangeHandler} //add EventListener pod event podpięta  w evencie jest taka wartosc jak target.value
+            value={props.inputText}
+        />
+        <button onClick={props.onClickHandler}>DODAJ TEKST</button>
+    </div>
+)
+const mapStateToProps = state  => ({
+    displayText: state.smartComponent.displayText,
+    inputText: state.smartComponent.inputText
+})
 
-    onClickHandler = (event) => {
-        this.setState({
-            displayText: this.state.inputText
-        })
-    }
+const mapDispatchToProps = dispatch => ({
+    onChangeHandler: (event) => dispatch(inputAction(event.target.value)),
+    onClickHandler: () => dispatch(displayText())
+})
 
-    render(){
-        return(
-            <div>
-                <p>{this.state.displayText}</p>
-                <input 
-                type= 'text'
-                onChange={this.onChangeHandler}
-                value={this.state.inputText}
-                />
-                <button onClick={this.onClickHandler}>DODAJ TEKST</button>
-            </div>
-        )
-    }
-}
-export default SmartComponent
+export default connect (
+    mapStateToProps,
+    mapDispatchToProps
+)(SmartComponent)
